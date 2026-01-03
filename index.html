@@ -3,115 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>devadevz</title>
+    <title>devadevz | Secure Access</title>
     <style>
-        /* Genel Ayarlar */
+        :root {
+            --blood-red: #8b0000;
+            --bright-red: #ff0000;
+            --dark-bg: #050505;
+            --glass: rgba(20, 20, 20, 0.8);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
         }
 
         body {
-            background-color: #000;
+            background-color: var(--dark-bg);
             color: #fff;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            /* Kan kırmızısı ve siyah geçişli arka plan animasyonu */
-            background: linear-gradient(135deg, #000000, #1a0000, #4d0000, #000000);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+            background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
         }
 
-        @keyframes gradientBG {
+        /* Animasyonlu Arka Plan */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #000, #4d0000, #000);
+            background-size: 400% 400%;
+            animation: moveGradient 10s ease infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes moveGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Konteynır ve Animasyonlar */
-        .container {
+        /* Cam Panel Tasarımı */
+        .main-card {
+            background: var(--glass);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 20px rgba(139, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
-            z-index: 1;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease;
         }
 
         h1 {
-            font-size: 5rem;
-            font-weight: 900;
-            letter-spacing: 10px;
+            font-size: 3.5rem;
+            letter-spacing: 8px;
+            color: var(--blood-red);
+            text-shadow: 0 0 15px var(--blood-red);
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
-            color: #8b0000; /* Kan Kırmızısı */
-            text-shadow: 0 0 20px rgba(139, 0, 0, 0.6);
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1.5s forwards ease-out;
         }
 
-        p {
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: fadeInUp 1.5s forwards ease-out 0.5s;
+        .status-text {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
         }
 
-        /* Parlama Efekti */
-        .glow-text {
+        /* Giriş Alanı */
+        .input-group {
             position: relative;
-            display: inline-block;
+            margin-top: 2rem;
         }
 
-        .glow-text::after {
-            content: 'devadevz';
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #ff0000;
-            filter: blur(15px);
-            opacity: 0;
-            animation: pulseGlow 4s infinite alternate;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulseGlow {
-            0% { opacity: 0.2; }
-            100% { opacity: 0.8; }
-        }
-
-        /* Kan Damlası Figürü (Opsiyonel Estetik) */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+        input {
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 20%, #000 80%);
-            pointer-events: none;
+            padding: 15px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            letter-spacing: 2px;
         }
 
+        input:focus {
+            border-color: var(--bright-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 1rem;
+            background: var(--blood-red);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--bright-red);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--bright-red);
+        }
+
+        /* Admin/Üye Paneli */
+        #content-area {
+            display: none;
+            width: 90%;
+            max-width: 1000px;
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 20px;
+            animation: slideUp 0.8s ease;
+        }
+
+        .panel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .section {
+            background: rgba(0,0,0,0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #222;
+            text-align: left;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .badge-admin { background: #8b0000; }
+        .badge-user { background: #333; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .ban-btn { background: #ff0000; padding: 5px; font-size: 10px; width: auto; margin: 0; }
     </style>
 </head>
 <body>
 
-    <div class="overlay"></div>
+<div class="bg-glow"></div>
 
-    <div class="container">
-        <div class="glow-text">
-            <h1>devadevz</h1>
-        </div>
-        <p>site şuanda kapalı daha sonra geliştirilecek</p>
+<div id="login-screen" class="main-card">
+    <h1>devadevz</h1>
+    <p class="status-text">site şuanda kapalı daha sonra geliştirilecek</p>
+    
+    <div class="input-group">
+        <input type="password" id="key-input" placeholder="ACCESS KEY ENTER">
+        <button onclick="checkAccess()">Sisteme Gir</button>
     </div>
+    <div id="error-msg" style="color: red; margin-top: 10px; font-size: 0.8rem; display: none;">GEÇERSİZ KEY VEYA BANLI IP</div>
+</div>
+
+<div id="content-area">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 id="panel-title" style="color: var(--blood-red);">PANEL</h2>
+        <button onclick="location.reload()" style="width: auto; padding: 5px 15px;">Çıkış</button>
+    </div>
+
+    <div class="panel-grid">
+        <div class="section">
+            <h3>Dosya Merkezi</h3>
+            <div id="admin-upload" style="display: none; margin-bottom: 1rem;">
+                <input type="text" id="file-name" placeholder="Dosya Adı" style="margin-bottom: 5px;">
+                <button onclick="addFile()" style="padding: 5px;">Dosya Ekle (Max 15)</button>
+            </div>
+            <div id="file-list">
+                </div>
+        </div>
+
+        <div id="admin-logs" class="section" style="display: none;">
+            <h3>Sistem Logları & IP Kontrol</h3>
+            <table id="log-table">
+                <thead>
+                    <tr>
+                        <th>IP</th>
+                        <th>Key</th>
+                        <th>Zaman</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody id="log-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Konfigürasyon
+    const ADMIN_KEY = "devadevz777admin505";
+    const USER_KEY = "peak404";
+    
+    // Simüle edilmiş IP (Gerçek IP için backend gerekir, bu tarayıcı tabanlıdır)
+    let userIP = "192.168.1." + Math.floor(Math.random() * 255);
+
+    // Başlangıçta ban kontrolü
+    if(localStorage.getItem('ban_' + userIP)) {
+        document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:20%'>ERİŞİM ENGELLENDİ<br>IP BANLANDI</h1>";
+    }
+
+    function checkAccess() {
+        const input = document.getElementById('key-input').value;
+        const error = document.getElementById('error-msg');
+
+        if (input === ADMIN_KEY) {
+            login("ADMIN");
+        } else if (input === USER_KEY) {
+            login("USER");
+        } else {
+            error.style.display = "block";
+            error.innerText = "GEÇERSİZ KEY!";
+        }
+    }
+
+    function login(role) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('content-area').style.display = 'block';
+        document.getElementById('panel-title').innerText = "devadevz | " + role + " PANEL";
+
+        // Log kaydı oluştur
+        saveLog(userIP, role);
+
+        if (role === "ADMIN") {
+            document.getElementById('admin-upload').style.display = 'block';
+            document.getElementById('admin-logs').style.display = 'block';
+            renderLogs();
+        }
+        renderFiles();
+    }
+
+    // Dosya Sistemi
+    let files = JSON.parse(localStorage.getItem('files')) || [];
+
+    function addFile() {
+        const name = document.getElementById('file-name').value;
+        if (files.length >= 15) {
+            alert("Maksimum 15 dosya sınırına ulaşıldı!");
+            return;
+        }
+        if (name) {
+            files.push({name: name, date: new Date().toLocaleString()});
+            localStorage.setItem('files', JSON.stringify(files));
+            renderFiles();
+            document.getElementById('file-name').value = "";
+        }
+    }
+
+    function renderFiles() {
+        const list = document.getElementById('file-list');
+        list.innerHTML = files.length === 0 ? "<p>Henüz dosya yok.</p>" : "";
+        files.forEach((f, index) => {
+            list.innerHTML += `
+                <div style="background:#111; padding:10px; margin-top:5px; border-radius:5px; display:flex; justify-content:space-between;">
+                    <span>${f.name}</span>
+                    <a href="#" style="color:red; text-decoration:none;">[İNDİR]</a>
+                </div>
+            `;
+        });
+    }
+
+    // Log Sistemi
+    function saveLog(ip, role) {
+        let logs = JSON.parse(localStorage.getItem('logs')) || [];
+        logs.push({ip: ip, role: role, time: new Date().toLocaleTimeString()});
+        localStorage.setItem('logs', JSON.stringify(logs));
+    }
+
+    function renderLogs() {
+        const body = document.getElementById('log-body');
+        let logs = JSON.parse(localStorage.getItem('logs')) || [];
+        body.innerHTML = "";
+        logs.forEach(l => {
+            body.innerHTML += `
+                <tr>
+                    <td>${l.ip}</td>
+                    <td><span class="badge ${l.role === 'ADMIN' ? 'badge-admin' : 'badge-user'}">${l.role}</span></td>
+                    <td>${l.time}</td>
+                    <td><button class="ban-btn" onclick="banIP('${l.ip}')">BAN</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function banIP(ip) {
+        localStorage.setItem('ban_' + ip, true);
+        alert(ip + " adresi banlandı. Bir sonraki girişte engellenecek.");
+        location.reload();
+    }
+</script>
 
 </body>
 </html>
